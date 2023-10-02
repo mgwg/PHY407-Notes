@@ -62,7 +62,6 @@ plt.savefig("3b.pdf", bbox_inches="tight")
 
 # calculate and print the standard deviation, and estimated error
 print(f"3b: std of p(u)-q(u) {np.std(difference)}")
-print(f"3b: estimate of error {31e-16 * 500**0.5 * (np.mean(np.abs(difference))**2)**0.5}")
 
 # ===================================== c =====================================
 # initialize and set u, p, q arrays as before
@@ -94,5 +93,3 @@ ax.plot(u_array, f-1, color=colors[0])
 ax.set_xlabel("u")
 ax.set_ylabel("$u^8/(u^4 u^4) - 1$")
 plt.savefig("3d.pdf", bbox_inches="tight")
-# print std of f
-print(f"3d: std: {np.std(f)}")

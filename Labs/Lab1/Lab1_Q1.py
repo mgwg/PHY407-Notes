@@ -15,7 +15,7 @@ matplotlib.rcParams.update({'font.size': 15})
 # ===================================== a =====================================
 def simpson(N, a, b, f, args=[]):
     """
-    Uses Simpson's rule to compute the integral of f from a to b, with N points
+    Uses Simpson's rule to compute the integral of f from a to b, with N slices
     Args:
         N (int)
         a (float)
@@ -75,7 +75,7 @@ plt.savefig("1a.pdf", bbox_inches="tight")
 
 # Top axis plots Bessel function
 # Bottom plots the difference between Simpson's rule and Scipy
-fig, ax = plt.subplots(2, 1)
+fig, ax = plt.subplots(2, 1, figsize=(10, 8))
 
 x_arr = np.linspace(0, 20, 100)
 for m in range(3):
@@ -104,7 +104,7 @@ ax[0].axhline(0, color="lightgray")
 ax[0].grid(color="gainsboro")
 
 ax[1].set_xlabel("x")
-ax[1].set_yscale("log")
+# ax[1].set_yscale("log")
 ax[1].set_ylabel("|Simpson - Scipy|")
 ax[1].axhline(0, color="lightgray")
 ax[1].grid(color="gainsboro")
