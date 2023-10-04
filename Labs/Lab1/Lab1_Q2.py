@@ -174,15 +174,16 @@ print(f"\t\ttime = {time_trapezoid}")
 # ===================================== c =====================================
 N1 = 32 
 N2 = 64
-
-I1_simpson = dawson_simpson(N1, x)
-I2_simpson = dawson_simpson(N2, x)
-eps2_simpson = np.abs(1/3*(I2_simpson - I1_simpson))
+x = 4
 
 I1_trapezoid = dawson_trapezoid(N1, x)
 I2_trapezoid = dawson_trapezoid(N2, x)
-eps2_trapzoid = np.abs(1/15*(I2_trapezoid - I1_trapezoid))
+eps2_trapzoid = np.abs(1/3*(I2_trapezoid - I1_trapezoid))
+
+I1_simpson = dawson_simpson(N1, x)
+I2_simpson = dawson_simpson(N2, x)
+eps2_simpson = np.abs(1/15*(I2_simpson - I1_simpson))
 
 print("Question 2 c)")
-print(f"\tSimpson: {eps2_simpson}")
 print(f"\tTrapezoidal: {eps2_trapzoid}")
+print(f"\tSimpson: {eps2_simpson}")
