@@ -23,11 +23,11 @@ right  = 2.50cm]{geometry}
 
 \begin{document}
 
-\title{ESC407 Lab 1}
+\title{ESC407 Lab 2}
 
 \author{Maggie Wang}
 
-\date{October 2, 2023}
+\date{October 16, 2023}
 \maketitle
 
 \begin{enumerate}
@@ -36,18 +36,44 @@ right  = 2.50cm]{geometry}
     \item The derivative of $f(x)=e^{2x}$ was calculated numerically at $x=0$, using central differences. 
     Table \ref{tab:1a} lists the numerically computed value of $f'(0)$ for different step sizes $h$ between $10^{-16}$ and $1$.
     
+    % \begin{table}[h]
+    %     \centering
+    %     \begin{tabular}{c|c c c c c c}
+    %         $h$ & $10^{-16}$ & $10^{-15}$ & $10^{-14}$ & $10^{-13}$ & 
+    %         $10^{-12}$ \\ 
+    %         $f'(0)$ & 1.11022302 & 2.10942375 & 1.99840144 & 1.99951167 &
+    %         2.00006678 \\  [0.2 em] \hline  \\[-0.8em]
+    %         $h$ & $10^{-11}$ & $10^{-10}$ & $10^{-9}$ & $10^{-8}$ & 
+    %         $10^{-7}$ & $10^{-6}$ \\ 
+    %         $f'(0)$ & 2.00000017 & 2.00000017 & 2.00000005 & 1.99999999 & 2. & 2. \\ [0.2 em] \hline  \\[-0.8em]
+    %         $h$ & $10^{-5}$ & $10^{-4}$ & $10^{-3}$ & $10^{-2}$ & $10^{-1}$ & $10^{0}$\\
+    %         $f'(0)$  & 2. & 2. & 2.00000033 & 2.00003333 & 2.003335 & 2.35040239
+    %     \end{tabular}
+    %     \caption{Derivative of $f(x)=e^{2x}$ at $x=0$ for different $h$ values}
+    %     \label{tab:1a}
+    % \end{table}
+
     \begin{table}[h]
         \centering
-        \begin{tabular}{c|c c c c c c}
-            $h$ & $10^{-16}$ & $10^{-15}$ & $10^{-14}$ & $10^{-13}$ & 
-            $10^{-12}$ \\ 
-            $f'(0)$ & 1.11022302 & 2.10942375 & 1.99840144 & 1.99951167 &
-            2.00006678 \\  [0.2 em] \hline  \\[-0.8em]
-            $h$ & $10^{-11}$ & $10^{-10}$ & $10^{-9}$ & $10^{-8}$ & 
-            $10^{-7}$ & $10^{-6}$ \\ 
-            $f'(0)$ & 2.00000017 & 2.00000017 & 2.00000005 & 1.99999999 & 2. & 2. \\ [0.2 em] \hline  \\[-0.8em]
-            $h$ & $10^{-5}$ & $10^{-4}$ & $10^{-3}$ & $10^{-2}$ & $10^{-1}$ & $10^{0}$\\
-            $f'(0)$  & 2. & 2. & 2.00000033 & 2.00003333 & 2.003335 & 2.35040239
+        \begin{tabular}{l l}
+            $h$ & $f'(0)$\\ [0.2 em] \hline  \\[-0.8em]
+            $10^{-16}$ & 1.1102230246251565 \\
+            $10^{-15}$ & 2.1094237467877974 \\
+            $10^{-14}$ & 1.9984014443252818 \\
+            $10^{-13}$ & 1.9995116673499070 \\
+            $10^{-12}$ & 2.0000667788622195 \\
+            $10^{-11}$ & 2.0000001654807420 \\
+            $10^{-10}$ & 2.0000001654807420 \\  
+            $10^{-9}$ & 2.0000000544584395 \\
+            $10^{-8}$ & 1.9999999878450580 \\
+            $10^{-7}$ & 1.9999999989472883 \\
+            $10^{-6}$ & 1.9999999999464890 \\
+            $10^{-5}$ & 2.0000000000242046 \\
+            $10^{-4}$ & 2.0000000033337795\\
+            $10^{-3}$ & 2.0000003333333627\\
+            $10^{-2}$ & 2.0000333334999842\\
+            $10^{-1}$ & 2.0033350003968820\\
+            $1$ & 2.3504023872876028\\
         \end{tabular}
         \caption{Derivative of $f(x)=e^{2x}$ at $x=0$ for different $h$ values}
         \label{tab:1a}
@@ -55,39 +81,91 @@ right  = 2.50cm]{geometry}
 
     The raw output from the code is 
     \begin{verbatim}
-1 a) errors:  [1.11022302 2.10942375 1.99840144 1.99951167 2.00006678 2.00000017
-2.00000017 2.00000005 1.99999999 2.         2.         2.
-2.         2.00000033 2.00003333 2.003335   2.35040239]
+1 a) errors
+    h       f'(0)
+    1e-16:	1.1102230246251565
+    1e-15:	2.1094237467877974
+    1e-14:	1.9984014443252818
+    1e-13:	1.999511667349907
+    1e-12:	2.0000667788622195
+    1e-11:	2.000000165480742
+    1e-10:	2.000000165480742
+    1e-09:	2.0000000544584395
+    1e-08:	1.999999987845058
+    1e-07:	1.9999999989472883
+    1e-06:	1.999999999946489
+    1e-05:	2.0000000000242046
+    0.0001:	2.0000000033337795
+    0.001:	2.0000003333333627
+    0.01:	2.0000333334999842
+    0.1:	2.003335000396882
+    1.0:	2.3504023872876028
     \end{verbatim}
 
-    \item The minimum in error and the corresponding step size matches the expected value, calculated using $C=10^{-16}$. 
-    The calculated error as a function of $h$ is shown in fig \ref{fig:1b}. The estimated optimal step size is $6.7\times 10^{-6}$, with a corresponding error of $4.48\times 10^{-11}$. 
+    \item The expected optimal step size $h^*$ and corresponding error are calculated using equations (5.99) and (5.100) from the textbook, using $C=10^{-16}$. We find
+    \begin{align*}
+        h^* &= \bigg(24 C \bigg|\frac{f(x)}{f'''(x)}\bigg|\bigg)^{1/3}\\
+            &= \bigg(\frac{24 C e^{2x}}{2^{3} e^{2x}}\bigg)^{1/3}\\
+            &= \bigg(\frac{24 C}{2^3}\bigg)^{1/3}\\
+            &\approx 6.7\times 10^{-6}
+    \end{align*}
+    and
+    \begin{align*}
+        \epsilon &= \frac{2C|f(x)|}{h^*} + \frac{1}{24}h^2|f'''(x)|\\
+        &= 4.48\times10^{-11}
+    \end{align*}
+    
+    The actual error is plotted against $h$ in fig \ref{fig:1b}. We see that the expected optimal step size and minimum in error are very close to their actual values.
     \begin{figure}[h]
         \centering 
-        \includegraphics[width=0.48\textwidth]{Q1b.pdf}
-        \caption{Calculated error vs $h$}
+        \includegraphics[width=0.5\textwidth]{Q1b.pdf}
+        \caption{Calculated error of $f'(0)$ using central difference approximation vs step size $h$}
         \label{fig:1b}
       \end{figure}
 
-    \item The first 10 derivatives of $f'(x)$ at $x=0$ calculated using central differences with the optimal step size (which is the same for all derivatives of $f(x)$)
-    are listed in table \ref{tab:1c}.
-    \begin{table}[h]
+    \item The first 10 derivatives of $f'(x)$ at $x=0$ calculated using central differences with the optimal step size from part b) (which is the same for all $m$), and with $h-0.05$, are listed in table \ref{tab:1c}.
+    However, for $m>3$, rounding error from repeated approximations accumulate, and calculated values of $f^m(0)$ diverges. 
+    Using a larger $h$ reduces the roundoff error and leads to more accurate calculations the higher order derivatives.
+    \begin{table}[H]
         \centering
-        \begin{tabular}{c|c c c c c}
-            $m$ & 1 & 2 & 3 & 4 & 5 \\
-            $f'(0)$ & 2 & 4 & 7.77 & -2.21$\times 10^5$ & 8.26$\times 10^9$ \\ [0.2 em] \hline  \\[-0.8em]
-            & 6 & 7 & 8 & 9 & 10\\
-            & 2.22$\times 10^{16}$ & -3.69$\times 10^{20}$ & -2.12$\times 10^{27}$ & 2.06$\times 10^{31}$ & 2.0$\times 10^{38}$
+        \begin{tabular}{l | c l l}
+            $m$ & Analytical value & $h \approx 6.7\times10^{-6}$ & $h=0.05$\\ [0.2 em] \hline  \\[-0.8em] 
+            1 & 2 & 2.0000000000234888 & 2.000833437506202\\
+            2 & 4& 4.000001933007014 & 4.003334444642892\\
+            3 & 8&7.77155789571232 & 8.010005418359611\\
+            4 & 16&-221126.08039335813 & 16.02668667564089\\
+            5 & 32&8258210993.557659 & 32.06673059601428\\
+            6 & 64&2.2204420456714464e+16 & 64.16018684518576\\
+            7 & 128&-3.68559504405105e+20 & 128.37384304020816\\
+            8 & 256&-2.1195518363153336e+27 & 256.8546079828593\\
+            9 & 514&2.05607099203305e+31 & 513.9293079992058\\
+            10: & 1028&1.971716534777767e+38 & 1028.4099971613614\\
         \end{tabular}
-        \caption{Approximate values for $f^m(0)$ computed using central differences}
+        \caption{Approximate values for $f^m(0)$ computed using central differences, with step size $h=6.7\times10^{-6}$, and $h=0.05$.}
         \label{tab:1c}
     \end{table}
+    % The optimal step size is the same for all $f^m(x)$:
+    % \begin{align*}
+    %     h^* &= \bigg(\frac{24 C f^m(x)}{f^{m+1}(x) }\bigg)^{1/3} \\ 
+    %         &= \bigg(\frac{24 C \cdot 2^m e^{2x}}{2^{m+3} e^{2x}}\bigg)^{1/3}\\
+    %         &= \bigg(\frac{24 C}{2^3}\bigg)^{1/3}\\
+    %         &\approx 6.7\times 10^{-6}
+    % \end{align*}
+
     The raw output from the code is:
 \begin{verbatim}
-1 c) derivatives:  [2.0000000000234888, 4.000001933007014, 7.77155789571232, 
-    -221126.08039335813, 8258210993.557659, 2.2204420456714464e+16, 
-    -3.68559504405105e+20, -2.1195518363153336e+27, 2.05607099203305e+31, 
-    1.971716534777767e+38]
+1 c) derivatives using optimal h from part b: 
+    m       optimal h                h=0.05
+    1:      2.0000000000234888       2.000833437506202
+    2:      4.000001933007014        4.003334444642892
+    3:      7.77155789571232         8.010005418359611
+    4:      -221126.08039335813      6.02668667564089
+    5:      8258210993.557659        32.06673059601428
+    6:      2.2204420456714464e+16   64.16018684518576
+    7:      -3.68559504405105e+20    128.37384304020816
+    8:      -2.1195518363153336e+27  256.8546079828593
+    9:      2.05607099203305e+31     513.9293079992058
+    10:     1.971716534777767e+38    1028.4099971613614
 \end{verbatim}
 \end{enumerate}
 
@@ -102,7 +180,8 @@ right  = 2.50cm]{geometry}
     \label{fig:2a}
   \end{figure}
 
-  \item The error on $D(4)$ using gaussian quadrature, $I_{2N} - I_N$ for the values of $N$ in 2a) are plotted in fig \ref{fig:2b}. The error decreases quickly from $N=8$ to around $N=20$, and then remains around the machine precision limit.
+  \item The error on $D(4)$ using gaussian quadrature, $I_{2N} - I_N$ for the values of $N$ in 2a) are plotted in fig \ref{fig:2b}. The error decreases quickly from $N=8$ to around $N=20$, and then remains around the machine precision limit, 
+  which suggests the accuracy is limited by roundoff error instead of estimations errors from using Gaussian Quadrature.
   \begin{figure}[h]
     \centering 
     \includegraphics[width=0.42\textwidth]{Q2b.pdf}
@@ -125,7 +204,7 @@ right  = 2.50cm]{geometry}
     \item A function $H(n, x)$ was written to calculate the $n^{th}$ degree Hermite polynomial for a given x based on its recursion relation
     $H_{n+1}(x) = 2xH_n(x)-2nH_{n-1}(x)$.
 
-    \item Fig \ref{fig:3b} shows the wave functions for the first 4 energy levels of a 1D quantum harmoniz oscillator.
+    \item Fig \ref{fig:3b} shows the wave functions for the first 4 energy levels of a 1D quantum harmonic oscillator.
     \begin{figure}[H]
         \centering 
         \includegraphics[width=0.42\textwidth]{Q3b.pdf}
@@ -133,20 +212,21 @@ right  = 2.50cm]{geometry}
         \label{fig:3b}
       \end{figure}
 
-    \item The potential energy for $n$ from 0 to 10 computed using Gaussian quadrature using 100 points, from the formula 
+    \item The potential energy $U$ for $n$ from 0 to 10 computed using Gaussian quadrature using 100 points, from the formula 
     \begin{align*}
-        PE &= \frac{\braket{x^2}}{2} = \int_{-\infty}^{\infty}x^2|\psi_n(x)|^2 dx
+        U(n) &= \frac{\braket{x^2}}{2} = \int_{-\infty}^{\infty}x^2|\psi_n(x)|^2 dx
     \end{align*}
-    The improper integral is calculated using the following transformation
+
+    The improper integral is treated by applying the following transformation
     \begin{align*}
         \int_{-\infty}^{\infty} f(x) dx &= \int_{-\pi/2}^{\pi/2} \frac{f(\text{tan }z)}{\text{cos}^2 z} dz
     \end{align*}
-    The potential energies are listed in table \ref{tab:3c}
+    Table \ref{tab:3c} lists the calculated potential energies of the particle for each $n$
     \begin{table}[h]
         \centering
         \begin{tabular}{c|c c c c c c c c c c c}
             $n$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
-            $\braket{x^2}$ & 0.25 & 0.75 & 1.25 & 1.75 & 2.25 & 2.75 & 3.25 & 3.75 & 4.25 & 4.75 & 5.25
+            $U(n)$ & 0.25 & 0.75 & 1.25 & 1.75 & 2.25 & 2.75 & 3.25 & 3.75 & 4.25 & 4.75 & 5.25
         \end{tabular}
         \caption{Potential energies of the quantum harmonic oscillator}
         \label{tab:3c}

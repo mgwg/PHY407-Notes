@@ -46,8 +46,8 @@ def gaussxwab(N,a,b):
         a (float): start of integration interval
         b (float): end of integration interval
     """
-    x,w = gaussxw(N)
-    return 0.5*(b-a)*x+0.5*(b+a),0.5*(b-a)*w
+    x,w = gaussxw(N) 
+    return 0.5*(b-a)*x+0.5*(b+a),0.5*(b-a)*w 
 
 def gaussian_quad(N, a, b, f, args=[]):
     """returns integral of f computed using gaussian quadrature, using N points 
@@ -63,8 +63,8 @@ def gaussian_quad(N, a, b, f, args=[]):
     Returns:
         float
     """
-    pos, w = gaussxwab(N, a, b)
-    return np.sum(w*f(pos, *args))
+    pos, w = gaussxwab(N, a, b) # get positions and weights
+    return np.sum(w*f(pos, *args)) # return weighted sum
 
 # ================================= a ==============================================
 def H(n, x):

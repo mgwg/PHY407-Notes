@@ -23,7 +23,11 @@ def central_difference(h, x, f):
 hvals = np.logspace(-16, 0, 17)
 # calculate and print corresponding f'(0)
 dfdx = central_difference(hvals, 0, f)
-print("1 a) errors: ", dfdx)
+
+print("1 a) errors")
+print(f"\th\tf'(0)")
+for i in range(len(hvals)):
+    print(f"\t{hvals[i]}\t{dfdx[i]}")
 
 # ================================= b ==============================================
 
@@ -62,8 +66,8 @@ plt.savefig("../Lab2/Q1b.pdf", bbox_inches="tight")
 
 print(f"1 b): estimated step size {h_opt}, error {eps_min}")
 print(f"1 b): actual step size {hvals[imin]}, error {errors[imin]}")
-# ================================= c ==============================================
 
+# ================================= c ==============================================
 
 def delta(f, x, m, h):
     """ from the lab manual: mth derivative of f, evaluated at x using repeated 
@@ -76,8 +80,19 @@ def delta(f, x, m, h):
 
 # initialize x
 x = 0
-# get optimal value of h
+# get optimal value of h, as in b
 h_opt = (24*C*f(x)/dmf(x, 3))**(1/3)
-# calculate and print list of derivatives of f at x=0
-dfs = [delta(f, x, m, h_opt) for m in range(1, 11)]
-print("1 c) derivatives: ", dfs)
+
+# calculate and print list of derivatives of f at x=0, using h_opt
+dfs_hopt = [delta(f, x, m, h_opt) for m in range(1, 11)]
+
+print("1 c) derivatives using optimal h from part b: ")
+
+# same as above, but using h=0.1
+h = 0.05
+dfs = [delta(f, x, m, h) for m in range(1, 11)]
+print(f"\tm\t\toptimal h\t\th=0.05")
+for i in range(1, 11):
+    print(f"\t{i}:\t\t{dfs_hopt[i-1]}\t\t{dfs[i-1]}")
+
+
