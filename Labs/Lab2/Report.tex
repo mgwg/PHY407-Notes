@@ -33,7 +33,10 @@ right  = 2.50cm]{geometry}
 \begin{enumerate}
 \item Central Differences for Numerical Differentiation
 \begin{enumerate}
-    \item The derivative of $f(x)=e^{2x}$ was calculated numerically at $x=0$, using central differences. 
+    \item The derivative of $f(x)=e^{2x}$ was calculated numerically at $x=0$, using central differences, as 
+    \begin{align*}
+        f'(x) &\approx \frac{f(x+h/2)-f(x-h/2)}{h}
+    \end{align*}
     Table \ref{tab:1a} lists the numerically computed value of $f'(0)$ for different step sizes $h$ between $10^{-16}$ and $1$.
     
     % \begin{table}[h]
@@ -123,8 +126,9 @@ right  = 2.50cm]{geometry}
         \label{fig:1b}
       \end{figure}
 
-    \item The first 10 derivatives of $f'(x)$ at $x=0$ calculated using central differences with the optimal step size from part b) (which is the same for all $m$), and with $h-0.05$, are listed in table \ref{tab:1c}.
-    However, for $m>3$, rounding error from repeated approximations accumulate, and calculated values of $f^m(0)$ diverges. 
+    \item The first 10 derivatives of $f'(x)$ at $x=0$ were calculated using central differences, with higher derivatives implemented recursively. 
+    Table \ref{tab:1c} lists the derivatives using the optimal step size from part b) (which is the same for all $m$), and with $h-0.05$.
+    Using the optimal value of $h$, which is $\mathcal{O}(10^{-6})$, rounding error accumulate and calculated values of $f^m(0)$ diverges for $m>3$. 
     Using a larger $h$ reduces the roundoff error and leads to more accurate calculations the higher order derivatives.
     \begin{table}[H]
         \centering
@@ -151,7 +155,6 @@ right  = 2.50cm]{geometry}
     %         &= \bigg(\frac{24 C}{2^3}\bigg)^{1/3}\\
     %         &\approx 6.7\times 10^{-6}
     % \end{align*}
-
     The raw output from the code is:
 \begin{verbatim}
 1 c) derivatives using optimal h from part b: 
@@ -171,24 +174,25 @@ right  = 2.50cm]{geometry}
 
 \item Integrating the Dawson Function Again
 \begin{enumerate}
-  \item Fig \ref{fig:2a} shows the Dawson function at $x=4$ evaluated using trapezoidal rule, Simpson's rule and gaussian quadrature for varying integration slices $N$. 
-  The function calculated using gaussian quadrature converges much more quickly than integration schemes using Newton-Cotes formulae.
+  \item Fig \ref{fig:2a} shows the Dawson function at $x=4$ evaluated using trapezoidal rule, Simpson's rule and Gaussian quadrature for varying integration slices $N$ between 8 and 2048 (where $N$ is always even for Simpson's rule). 
+  The function calculated using Gaussian quadrature converges much more quickly than integration schemes using Newton-Cotes formulae.
   \begin{figure}[h]
     \centering 
     \includegraphics[width=0.4\textwidth]{Q2a.pdf}
     \caption{Dawson function $D(x)$ at $x=4$ calculated numerically vs number of integration slices $N$}
     \label{fig:2a}
   \end{figure}
-
-  \item The error on $D(4)$ using gaussian quadrature, $I_{2N} - I_N$ for the values of $N$ in 2a) are plotted in fig \ref{fig:2b}. The error decreases quickly from $N=8$ to around $N=20$, and then remains around the machine precision limit, 
-  which suggests the accuracy is limited by roundoff error instead of estimations errors from using Gaussian Quadrature.
+  \item The error on $D(4)$ using Gaussian quadrature, $I_{2N} - I_N$ for the values of $N$ in 2a) are plotted in fig \ref{fig:2b}. The error decreases quickly from $N=8$ to around $N=20$, and then remains around the machine precision limit, 
+  which suggests the accuracy is limited by roundoff error instead of estimations errors from using Gaussian guadrature.
   \begin{figure}[h]
     \centering 
     \includegraphics[width=0.42\textwidth]{Q2b.pdf}
-    \caption{Error on $D(4)$ using gaussian quadrature vs number of integration slices}
+    \caption{Error on $D(4)$ using Gaussian quadrature vs number of integration slices}
     \label{fig:2b}
   \end{figure}
-  \item Fig \ref{fig:2c} shows the relative error on $D(4)$ calculated using gaussian quadrature compared to the true value (from Scipy) as a function of the number of integration slices. 
+
+
+  \item Fig \ref{fig:2c} shows the relative error on $D(4)$ calculated using Gaussian quadrature compared to the true value (from Scipy) as a function of the number of integration slices. 
   The behaviour of the relative error is the same as the estimated error from fig \ref{fig:2b}, while being around an order or magnitude larger than the estimated error.
   \begin{figure}[H]
     \centering 
