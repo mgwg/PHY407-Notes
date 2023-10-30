@@ -84,13 +84,14 @@ def E_total(T):
     """
     return 2*np.pi*h*(c**2) * k**4 * np.pi**4 * T**4 / (15 * c**4 * h**4)
 
-def E_total_int(t, N):
+def E_total_int(t, N, a):
     """Returns total energy emitted by perfect blackbody at temperture T across 
     all wavelengths calculated numerically using Gaussian Quadrature
 
     Args:
         t (float, array): temperature of blackbody in K
         N (int): number of integration points
+        a (float): minimum integration bound (should be close to 0)
 
     Returns:
         (float, array)
@@ -98,8 +99,8 @@ def E_total_int(t, N):
     # calculate positions and weights for Gaussian Quadrature. 
     # Since the total energy is integrated from 0 to infinity, but we will 
     # apply a change of variables  l = z/(1-z) to the integrand to evaluate 
-    # it numerically from 0 to 1
-    z, w = gaussxwab(N, 0, 1)
+    # it numerically from a to 1
+    z, w = gaussxwab(N, a, 1)
     # get 2D arrays of Zs and Ts, where the x axis is transformed wavelength
     # and the y axis is temperature
     Z, T = np.meshgrid(z, t)
@@ -132,14 +133,14 @@ def eta(t, l, w):
 
     return E12/Etot 
 
-def get_etas(T, l1=380e-9, l2=780e-9, lN=10000):
+def get_etas(T, l1=380e-9, l2=780e-9, lN=100):
     """Returns the efficiency of a perfect blackbody for temperature T, 
     for radiation between 380 nm and 780 nm. 
     Energy in the wavelength range of interest is calculated numerically
     using Gaussian Quadrature
 
     Args:
-        Tmin (float, optional): Temperature in K.
+        T (float or array, optional): Temperature in K.
         l1 (float, optional): Lower bound of wavelength, in m. 
                                 Defaults to 380 nm.
         l2 (float, optional): Upper bound of wavelength in m. 
@@ -152,7 +153,6 @@ def get_etas(T, l1=380e-9, l2=780e-9, lN=10000):
     """
 
     l, w = gaussxwab(lN, l1, l2)
-    T = np.linspace(Tmin, Tmax, Tnvals)
     etas = eta(T, l, w)
 
     return etas
@@ -165,9 +165,9 @@ T = np.linspace(Tmin, Tmax, Tnvals)
 # First, we want to figure out how many integration points to use
 
 # array of num integration points
-Ns = [5000, 8000, 10000]
-# scale factor to change units in plot
-scale = 1e-6 
+Ns = [4000, 5000, 6000]
+# starting value of integration
+a = 1e-7
 
 fig, axs = plt.subplots(2, 1, height_ratios=(1,1), sharex=True)
 # calculate total energy using the analytical expression
@@ -178,42 +178,51 @@ for i in range(len(Ns)):
     N = Ns[i]
     color = colors[i]
     # calculate total energy numerically with N integration points
-    E_tot = E_total_int(T, N)
+    E_tot = E_total_int(T, N, a)
 
     # plot
-    axs[0].plot(T,  E_tot*scale, label = f"N={N}", color=color)
-    if i >= 1: # don't plot error for N = 5000, since it's too large
-        axs[1].plot(T, (E_tot-E_tot_real)/E_tot_real*100, label = f"N={N}", 
-                    color=color)
+    axs[0].plot(T,  E_tot, label = f"N={N}", color=color)
+    axs[1].plot(T, (E_tot-E_tot_real)/E_tot_real*100, label = f"N={N}", 
+                color=color)
 
-axs[0].plot(T, E_tot_real*scale, linestyle = ":", label="Analytic value", color="dimgrey")
+axs[0].plot(T, E_tot_real, linestyle = ":", label="Analytic value", color="dimgrey")
 axs[0].legend(loc=0)
 axs[1].axhline(0, linestyle="--", color="lightgray")
-axs[0].set_ylabel(f"$E(0,\infty)$ [W/um]")
+axs[0].set_ylabel(f"$E(0,\infty)$ [W/$m^2$]")
 axs[1].set_ylabel("Fractional error [%]")
 axs[1].set_xlabel("T [k]")
 
 plt.savefig("Q2a.pdf", bbox_inches="tight")
-# ===================================== b) ====================================
-lN = 10000
-l1_vis, l2_vis = 380e-9, 780e-9 # in m
-etas_vis = get_etas(T, l1_vis, l2_vis, lN) # use lN=10000 based on the plot above
 
-fig, ax = plt.subplots(1, 2, figsize=(10, 3))
+# ===================================== b) ====================================
+
+lN = 70 # determined empirically
+l1_vis, l2_vis = 380e-9, 780e-9 # in m
+etas_vis = get_etas(T, l1_vis, l2_vis, lN) 
+etas_vis_2N = get_etas(T, l1_vis, l2_vis, 2*lN)
+
+err_vis = np.abs(etas_vis_2N - etas_vis)
+
+fig, ax = plt.subplots(2, 1, figsize=(5.5, 5), height_ratios=(3,1))
+plt.tight_layout()
 ax[0].plot(T, etas_vis)
 ax[0].set_xlabel("T [K]")
 ax[0].set_ylabel(f"$\eta$ visible")
 
+ax[1].plot(T, err_vis)
+ax[1].set_xlabel("T [K]")
+ax[1].set_ylabel("Error")
+
 # plot is saved in next section
 # ===================================== c) ====================================
 
-def golden_ratio(x1, x4, f, args=[]):
-    """Calculates temperature of max efficiency for a perfect blackbody
-    using golden ratio
+def golden_ratio(x1, x4, eps, f, args=[]):
+    """Calculates maximum of function f with precision of eps
 
     Args:
         x1 (float): Starting lower bound of interval
         x4 (float): Starting upper bound of interval
+        eps (float): precision on result in x
         f (function): function to be maximized
         args (list, optional): additional parameters to pass to f. 
                     Defaults to empty list.
@@ -224,7 +233,7 @@ def golden_ratio(x1, x4, f, args=[]):
     # golden ratio
     z = (1+np.sqrt(5))/2
 
-    while np.abs(x1 - x4) >= 1: # accuracy to within 1K
+    while np.abs(x1 - x4) >= eps: # accuracy to within 1K
         # get x2, x3
         x2 = -(x4-x1)/z + x4
         x3 = (x4-x1)/z + x1
@@ -246,12 +255,13 @@ def golden_ratio(x1, x4, f, args=[]):
 # T1, T4 starting guesses based on plot in b)
 T1 = 6000 # K
 T4 = 8000 # K
+eps = 1
 
 # the integration occurs over the same interval, so save the position and 
 # weights for Gaussian Quadrature to reduce computation time
 l, w = gaussxwab(lN, l1_vis, l2_vis)
 
-Tmax_vis, eta_max_vis = golden_ratio(T1, T4, eta, [l, w])
+Tmax_vis, eta_max_vis = golden_ratio(T1, T4, eps, eta, [l, w])
 print("Maximum visible temperature and efficiency:", Tmax_vis, eta_max_vis)
 # add max point to plot
 ax[0].axvline(Tmax_vis, linestyle="--", color="lightgray")
@@ -259,31 +269,38 @@ ax[0].plot(Tmax_vis, eta_max_vis, marker="*", markersize=15, color="plum",
         label="maximum efficiency", linestyle="")
 ax[0].legend(loc=0)
 ax[0].annotate('a)', xy=(-2000, eta_max_vis*1.1), annotation_clip=False)
+ax[1].annotate('b)', xy=(-2000, np.max(err_vis)*1.1), annotation_clip=False)
+
+plt.savefig("Q2bc.pdf", bbox_inches="tight")
+
 # ===================================== d) ====================================
 
+lN = 70 # as before
 # update parameters
 l1_IR, l2_IR = 780e-9, 2250e-9 # in m
 etas = get_etas(T, l1_IR, l2_IR, lN)
 
-ax[1].plot(T, etas)
-ax[1].set_xlabel("T [K]")
-ax[1].set_ylabel(f"$\eta$ IR")
+fig, ax = plt.subplots(1, 1, figsize=(5, 3.5))
+plt.tight_layout()
+
+ax.plot(T, etas)
+ax.set_xlabel("T [K]")
+ax.set_ylabel(f"$\eta$ IR")
 
 # repeat calculation of maximum from part c)
 
 T1 = 2000 # K
 T4 = 4000 # K
+eps = 1
 l, w = gaussxwab(lN, l1_IR, l2_IR)
-Tmax_IR, eta_max_IR = golden_ratio(T1, T4, eta, [l, w])
+Tmax_IR, eta_max_IR = golden_ratio(T1, T4, eps, eta, [l, w])
 
 print("Maximum visible temperature and efficiency:", Tmax_IR, eta_max_IR)
 
 # add max point to plot
-ax[1].axvline(Tmax_IR, linestyle="--", color="lightgray")
-ax[1].plot(Tmax_IR, eta_max_IR, marker="*", markersize=15, color="plum", 
+ax.axvline(Tmax_IR, linestyle="--", color="lightgray")
+ax.plot(Tmax_IR, eta_max_IR, marker="*", markersize=15, color="plum", 
         label="maximum efficiency", linestyle="")
-ax[1].legend()
+ax.legend()
 
-ax[1].annotate('b)', xy=(-2000, eta_max_IR*1.1), annotation_clip=False)
-
-plt.savefig("Q2.pdf", bbox_inches="tight")
+plt.savefig("Q2d.pdf", bbox_inches="tight")

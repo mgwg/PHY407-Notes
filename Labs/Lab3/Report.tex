@@ -65,7 +65,7 @@ right  = 2.50cm]{geometry}
         \end{align}
         which can be solved with \code{np.linalg.eig}.
 
-        Solving for the entries $y_{ij}$ of $Y$ from Equation \ref{eqtn:ymtx}, we find $Y$ has the form of any skew-symmetric matrix $Y'$ plus the sparse matrix $Y_{s}$ where the only non-zero entries are $y_{s, 22}=-1/4$ and $y_{s,31}=4$:
+        Solving for the entries $y_{ij}$ of $Y$ from Equation \ref{eqtn:ymtx}, we find $Y$ has the form of any skew-symmetric matrix $Y'$, plus the sparse matrix $Y_{s}$, where the only non-zero entries are $y_{s, 22}=-1/4$ and $y_{s,31}=4$:
         \begin{align}
             Y &= Y' +   \begin{pmatrix}
                 0 & 0 &  & \cdots & & 0
@@ -82,50 +82,65 @@ right  = 2.50cm]{geometry}
               \end{pmatrix}.
         \end{align}
 
-        In the implementation of Equation \ref{eqtn:eigval}, $X$ can be written as an $N\times 6$ matrix where each row is the vector $X_i = (x_i^2, x_iy_i, y_i^2, x_i, y_i, 1)$ of the $i^{th}$ data point. For simplicity, we will set all upper diagonal entries of $Y'$ to 1. 
+        In the implementation of Equation \ref{eqtn:eigval}, $X$ can be written as an $N\times 6$ matrix where each row is the vector $X_i = (x_i^2, x_iy_i, y_i^2, x_i, y_i, 1)$ of the $i^{th}$ data point. For simplicity and to decrease roundoff error, we will set $Y'$ to be an empty matrix. 
         Thus, we can find the parameters $A$, $B$, $C$, $D$, $F$, $G$ from $a$. 
-    \item Figure \ref{fig:1a} shows the best-fit ellipse from the given dataset.
+    \item Figure \ref{fig:1a} shows the best-fit ellipse from the given dataset. The ellipse appears to fit the data well, with small residuals; however, the data covers a limited region of the orbit. 
     \begin{figure}[H]
         \centering 
         \captionsetup{margin=3.2cm}
         \includegraphics[width=0.5\linewidth]{Q1a.pdf}
-        \caption{\label{fig:1a} Best fit ellipse and data points, with $A=-0.0353$, $B=-0.0268$, $C=-0.0460$, $D=-0.2625$, $F=0.1640$, and $G=0.7813$.}
+        \caption{\label{fig:1a} Best fit ellipse and data points, with $A=-0.0357$, $B=-0.0271$, $C=-0.0465$, $D=-0.2625$, $F=0.1659$, and $G=0.7752$.}
     \end{figure}
 \end{enumerate}
 
 \item \textbf{How many computational physicists does it take to screw in a lightbulb?}
 \begin{enumerate}
-  \item \code{get\_etas(T, l1, l2, lN)} in \code{Lab3\_Q2.py} calculates the efficiency of a perfect blackbody (lightbulb) at temperature T, 
-  for radiation between $\lambda_1=$\code{l1} and $\lambda_2=$\code{l2}. The energy radiated between $\lambda_1$ and $\lambda_2$,
+  \item \code{get\_etas(T, l1, l2, lN)} in \code{Lab3\_Q2.py} calculates the efficiency of a perfect blackbody (lightbulb) at temperature \code{T}, 
+  for radiation between $\lambda_1=$\code{l1} and $\lambda_2=$\code{l2} using Gaussian Quadrature with \code{lN} points. The efficiency is defined as 
+  \begin{align*}
+    \eta &= \frac{E(\lambda_1,\lambda_2)}{E(0,\infty)},
+  \end{align*}
+  where 
   \begin{align}
-    E(\lambda_1,\lambda_2) &= \int_{\lambda_1}^{\lambda_2}I(\lambda)d\lambda,
+    E(\lambda_1,\lambda_2) &= \int_{\lambda_1}^{\lambda_2} \frac{2\pi Ahc^2}{\lambda^5(e^{hc/\lambda k_bT}-1)} d\lambda
   \end{align}
-  is calculated using Gaussian Quadrature with \code{lN} points. The total energy emitted by the lightbulb, $E(0, \infty)$, can be derived analytically when $\lambda_1=0$ and $\lambda_2=\infty$ as 
+  is the energy radiated between $\lambda_1$ and $\lambda_2$.
+  The total energy emitted by the lightbulb, $E(0, \infty)$, can be evaluated analytically to be
   \begin{align}
     E(0, \infty) &= \frac{4Ak_b^4\pi^5T^4}{15c^2h^3}.
   \end{align} 
-  The area $A$ is a constant factor for all $E$, which drops out of the calculation of $\eta$. For simplicity, we set $A=1$ m$^2$  (and omit it from the code). To determine an appropriate \code{lN}, we compare $E(0,\infty)$ obtained analytically and using Gaussian Quadrature (after applying a change of variables $\lambda=\frac{z}{1-z}$ to the improper integral). 
+  The analytical expression for $E(0,\infty)$ will be used to calculate $\eta$, since the undefined integrand at $\lambda=0$ makes accurate numerical calculations impractical (Figure \ref{fig:2a} shows an accurate calculation would require more than 5000 points). 
+  The area $A$ is a constant factor for all $E$, which drops out of the calculation of $\eta$ and is thus omitted from the code.
   \begin{figure}[H]
     \centering 
     \captionsetup{margin=3.2cm}
     \includegraphics[width=0.48\linewidth]{Q2a.pdf}
-    \caption{\label{fig:2a} $E(0,\infty)$ obtained analytically and using Gaussian Quadrature for $A=1$ m$^2$.}
+    \caption{\label{fig:2a} $E(0,\infty)$ obtained analytically and using Gaussian Quadrature with $A=1$ m$^2$.}
     \end{figure}
 
-  \item Using \code{ln}=10,000, we plot the efficiency $\eta$ from 300 K to 10,000K in Figure \ref{fig:2bd} a). 
-  \item Using the golden ratio method to find the temperature of maximum efficiency, we find $T_{max}=6913 K$ and $\eta_{max}=0.49$. Albeit slow, golden ratio suffices in this instance, since the majority of computational power in evaluating $\eta$ arises from finding the weights and positions for Gaussian Quadrature, which only needs to be computed once across all iterations (since the integration bounds are constant)\footnote{To speed up the calculation, we could also take the first derivative of $\eta$ and search for its roots using Newton's method (Binary search is computationally equivalent to Golden Ratio, and it would be hard to isolate for $T$ in $\partial\eta(T)_T$ with which to use the Relaxation method). 
-  However, we would then also need to take the second derivative (which has a complicated expression and increases roundoff error due to added operations).}.
+  \item Using \code{ln}=70 (roughly chosen to minimize error estimates in Figure \ref{fig:2bc} c)), we plot the efficiency $\eta$ from 300 K to 10,000K in Figure \ref{fig:2bc}. 
+  However, we would then also need to take the second derivative (which has a complicated expression and increases roundoff error due to added operations).
+  \begin{figure}[H]
+    \centering 
+    \captionsetup{margin=3.2cm}
+    \includegraphics[width=0.5\linewidth]{Q2bc.pdf}
+    \caption{\label{fig:2bc} b) $\eta$ from 300 K to 10,000K for visible (380-780 nm) radiation and c) error $\epsilon=(I_{2N} - I_N)/I_N$}
+  \end{figure}
+  \item Using the golden ratio method to find the temperature of maximum efficiency, we find $T_{max}=6913 K$ and $\eta_{max}=0.49$. Albeit slow, golden ratio suffices in this instance, since the majority of computational power in evaluating $\eta$ arises from finding the weights and positions for Gaussian Quadrature, which only needs to be computed once across all iterations 
+  (since the integration bounds are constant)\footnote{To speed up the calculation, we could also take the first derivative of $\eta$ and search for its roots using Newton's method (Binary search is computationally equivalent to Golden Ratio, and it would be hard to isolate for $T$ in $\partial\eta(T)_T$ with which to use the Relaxation method).}
+  
   \item For a lightbulb emitting in the infrared, using the same calculation procedure as in a) and c) (with \code{l1}=780 nm and \code{l2}=2250 nm), we find that the temperature of maximum efficiency is now $T_{max}=2925 K$ with $\eta_{max}=0.67$. 
-  The IR efficiency from 300 to 10000 K is shown in Figure \ref{fig:2bd} b).
-  The temperature of maximum efficiency is impractical for both wavelength ranges, requiring temperatures in the 1000\textdegree Cs. 
-  However, the effective temperature of the sun, at 5772 K, is just below the maximum efficiency for emission in the visible wavelength range \footnote{\fullcite{blah}}.
+  The IR efficiency from 300 to 10000 K is shown in Figure \ref{fig:2d}.
   
   \begin{figure}[h]
     \centering 
     \captionsetup{margin=3.2cm}
-    \includegraphics[width=0.8\linewidth]{Q2.pdf}
-    \caption{\label{fig:2bd} $\eta$ from 300 K to 10,000K for a) visible (380-780 nm) and b) IR (780-2250 nm) radiation.}
+    \includegraphics[width=0.5\linewidth]{Q2d.pdf}
+    \caption{\label{fig:2d} $\eta$ from 300 K to 10,000K for IR (780-2250 nm) radiation.}
   \end{figure}
+
+  The melting point of Tungsten is around 3700 K\footnote{\fullcite{blah}}, which is above the optimal temperature for $IR$ radiation, but below that of visible light. 
+  It is possible to operate a light bulb at maximum efficiency in the IR region, but not for visible wavelengths.
 \end{enumerate}
 
 

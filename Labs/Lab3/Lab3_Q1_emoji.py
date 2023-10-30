@@ -1,6 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt 
 import matplotlib as mpl
+import matplotlib.pyplot as plt 
 
 # change default matplotlib settings
 # increase font size
@@ -118,17 +118,38 @@ print("Best fit parameters:", np.real(p))
 
 fig, axs = plt.subplots(2,1, figsize=(8, 8), sharex=False, 
                         height_ratios = [3,1])
-axs[0].plot(xs, ys[0], color="plum", linewidth=2, label="fit")
+fit, = axs[0].plot(xs, ys[0], color="plum", linewidth=2, label="fit")
 axs[0].plot(xs, ys[1], color="plum", linewidth=2)
-axs[0].plot(x, y, markersize=10, marker='*', linestyle="", 
-         color="hotpink", label="data")
-axs[0].plot(0, 0, color="gold", marker='$\U00002600$', linestyle="", 
-            markersize=20, label="Sun")
+data, = axs[0].plot(x, y, linestyle="", color="hotpink", label="data")
+origin, = axs[0].plot(0, 0, color="gold", linestyle="", label="Sun")
+legend0 = axs[0].legend(loc=1, labelspacing =1, borderpad=1)
 
-axs[0].set_xlabel("x [AU]")
-axs[0].set_ylabel("y [AU]")
-axs[0].legend(loc=0)
-fig.tight_layout()
+use_emoji = True
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+# reading the image
+sun = plt.imread('sun.png')
+comet = plt.imread('comet.png')
+ 
+image_box_comet = OffsetImage(comet, zoom=0.1)
+x, y = np.atleast_1d(x, y)
+for x0, y0 in zip(x, y):
+    ab = AnnotationBbox(image_box_comet, (x0+0.3, y0-0.5), frameon=False)
+    axs[0].add_artist(ab)
+
+image_box_sun = OffsetImage(sun, zoom=0.05)
+ab = AnnotationBbox(image_box_sun, (0, 0), frameon=False, )
+axs[0].add_artist(ab)
+
+axs[0].set_xlabel("x [AU]", font='DejaVu Sans')
+axs[0].set_ylabel("y [AU]", font='DejaVu Sans')
+
+# reorder elements
+legend0.set_zorder(2) 
+ab = AnnotationBbox(image_box_comet, (-4.5, 26), frameon=False)
+axs[0].add_artist(ab)
+
+ab = AnnotationBbox(image_box_sun, (-4.5, 22.5), frameon=False, )
+axs[0].add_artist(ab)
 
 # get residuals
 y_fit = get_y(x, p)
@@ -142,9 +163,16 @@ i = np.argmin(np.abs(diff), axis=0) # array of indices corresponding to
 # get the difference at those indices
 # this is a bit convoluted because we want to keep the sign of the difference
 residuals = [diff[i[j], j] for j in range(len(x))]
-                                    
-axs[1].plot(x, residuals/y*100, linestyle="", marker='*', markersize=10)
+frac_err = residuals/y*100
+x, y = np.atleast_1d(x, frac_err)
+
+image_box = OffsetImage(comet, zoom=0.08)
+for x0, y0 in zip(x, y):
+    ab = AnnotationBbox(image_box, (x0, y0), frameon=False)
+    axs[1].add_artist(ab)
+
+axs[1].plot(x, frac_err, linestyle="")
 axs[1].set_ylabel("normalized\nresiduals (%)")
 axs[1].axhline(0, linestyle="--", color="lightgrey")
-
+axs[1].set_ylim(min(frac_err)*1.7, max(frac_err)*1.3)
 plt.savefig("Q1a.pdf", bbox_inches="tight")

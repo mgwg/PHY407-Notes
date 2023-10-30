@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      6466,        196]
-NotebookOptionsPosition[      5241,        166]
-NotebookOutlinePosition[      5635,        182]
-CellTagsIndexPosition[      5592,        179]
+NotebookDataLength[      7266,        221]
+NotebookOptionsPosition[      6039,        191]
+NotebookOutlinePosition[      6433,        207]
+CellTagsIndexPosition[      6390,        204]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -141,27 +141,52 @@ Cell[BoxData[
   RowBox[{
    RowBox[{
     RowBox[{"El", "[", "T", "]"}], "/", 
-    RowBox[{"ET", "[", "T", "]"}]}], ",", "T"}], "]"}]], "Input",
- CellChangeTimes->{{3.9069104757831306`*^9, 3.906910495376754*^9}},
- CellLabel->"In[11]:=",ExpressionUUID->"f45c5644-28b6-4f94-93f0-7792b5ec82ac"],
+    RowBox[{"ET", "[", "T", "]"}]}], ",", 
+   RowBox[{"{", 
+    RowBox[{"T", ",", " ", "2"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.9069104757831306`*^9, 3.906910495376754*^9}, {
+  3.906988379879822*^9, 3.906988381196335*^9}},
+ CellLabel->"In[13]:=",ExpressionUUID->"f45c5644-28b6-4f94-93f0-7792b5ec82ac"],
 
 Cell[BoxData[
  RowBox[{
+  RowBox[{"-", 
+   FractionBox[
+    RowBox[{"2", " ", 
+     RowBox[{
+      SuperscriptBox["El", "\[Prime]",
+       MultilineFunction->None], "[", "T", "]"}], " ", 
+     RowBox[{
+      SuperscriptBox["ET", "\[Prime]",
+       MultilineFunction->None], "[", "T", "]"}]}], 
+    SuperscriptBox[
+     RowBox[{"ET", "[", "T", "]"}], "2"]]}], "+", 
   FractionBox[
    RowBox[{
-    SuperscriptBox["El", "\[Prime]",
+    SuperscriptBox["El", "\[Prime]\[Prime]",
      MultilineFunction->None], "[", "T", "]"}], 
-   RowBox[{"ET", "[", "T", "]"}]], "-", 
-  FractionBox[
-   RowBox[{
-    RowBox[{"El", "[", "T", "]"}], " ", 
+   RowBox[{"ET", "[", "T", "]"}]], "+", 
+  RowBox[{
+   RowBox[{"El", "[", "T", "]"}], " ", 
+   RowBox[{"(", 
     RowBox[{
-     SuperscriptBox["ET", "\[Prime]",
-      MultilineFunction->None], "[", "T", "]"}]}], 
-   SuperscriptBox[
-    RowBox[{"ET", "[", "T", "]"}], "2"]]}]], "Output",
- CellChangeTimes->{{3.906910488983284*^9, 3.9069104958789177`*^9}},
- CellLabel->"Out[11]=",ExpressionUUID->"618804fa-9e65-42a2-8d22-5dbd6fcd22d8"]
+     FractionBox[
+      RowBox[{"2", " ", 
+       SuperscriptBox[
+        RowBox[{
+         SuperscriptBox["ET", "\[Prime]",
+          MultilineFunction->None], "[", "T", "]"}], "2"]}], 
+      SuperscriptBox[
+       RowBox[{"ET", "[", "T", "]"}], "3"]], "-", 
+     FractionBox[
+      RowBox[{
+       SuperscriptBox["ET", "\[Prime]\[Prime]",
+        MultilineFunction->None], "[", "T", "]"}], 
+      SuperscriptBox[
+       RowBox[{"ET", "[", "T", "]"}], "2"]]}], ")"}]}]}]], "Output",
+ CellChangeTimes->{{3.906910488983284*^9, 3.9069104958789177`*^9}, 
+   3.906988381548491*^9},
+ CellLabel->"Out[13]=",ExpressionUUID->"ecf01b0e-cc3a-430a-9a03-233b4c76680d"]
 }, Open  ]]
 },
 WindowSize->{808, 791},
@@ -188,15 +213,15 @@ Cell[1770, 55, 618, 17, 64, "Output",ExpressionUUID->"378cbf34-766c-4b12-8514-8a
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[2425, 77, 413, 9, 30, "Input",ExpressionUUID->"447ea25f-9369-4830-97b4-88dc19d701d0"],
-Cell[2841, 88, 599, 17, 88, "Output",ExpressionUUID->"34d94740-7f02-4308-9228-61c1192ab357"]
+Cell[2841, 88, 599, 17, 65, "Output",ExpressionUUID->"34d94740-7f02-4308-9228-61c1192ab357"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[3477, 110, 231, 4, 30, "Input",ExpressionUUID->"ab09d055-f925-4c18-95df-d132a9554e4c"],
 Cell[3711, 116, 595, 17, 65, "Output",ExpressionUUID->"2f1a8110-e2a8-4ece-ac67-eba6f1771f73"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[4343, 138, 310, 7, 30, "Input",ExpressionUUID->"f45c5644-28b6-4f94-93f0-7792b5ec82ac"],
-Cell[4656, 147, 569, 16, 55, "Output",ExpressionUUID->"618804fa-9e65-42a2-8d22-5dbd6fcd22d8"]
+Cell[4343, 138, 413, 10, 30, "Input",ExpressionUUID->"f45c5644-28b6-4f94-93f0-7792b5ec82ac"],
+Cell[4759, 150, 1264, 38, 80, "Output",ExpressionUUID->"ecf01b0e-cc3a-430a-9a03-233b4c76680d"]
 }, Open  ]]
 }
 ]
