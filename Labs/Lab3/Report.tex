@@ -65,14 +65,14 @@ right  = 2.50cm]{geometry}
         \end{align}
         which can be solved with \code{np.linalg.eig}.
 
-        Solving for the entries $y_{ij}$ of $Y$ from Equation \ref{eqtn:ymtx}, we find $Y$ has the form of any skew-symmetric matrix $Y'$, plus the sparse matrix $Y_{s}$, where the only non-zero entries are $y_{s, 22}=-1/4$ and $y_{s,31}=4$:
+        Solving for the entries $y_{ij}$ of $Y$ from Equation \ref{eqtn:ymtx}, we find $Y$ has the form of any skew-symmetric matrix $Y'$, plus the sparse matrix $Y_{s}$, where the only non-zero entries are $y_{s, 22}=1/4$ and $y_{s,31}=-4$:
         \begin{align}
             Y &= Y' +   \begin{pmatrix}
                 0 & 0 &  & \cdots & & 0
                 \\
-                0 & -\frac{1}{4} & \ddots & & & 
+                0 & \frac{1}{4} & \ddots & & & 
                 \\
-                4 & 0 & 0 & \ddots & & \vdots
+                -4 & 0 & 0 & \ddots & & \vdots
                 \\
                 0 & 0 & \ddots & \ddots & \ddots & 
                 \\
@@ -83,8 +83,9 @@ right  = 2.50cm]{geometry}
         \end{align}
 
         In the implementation of Equation \ref{eqtn:eigval}, $X$ can be written as an $N\times 6$ matrix where each row is the vector $X_i = (x_i^2, x_iy_i, y_i^2, x_i, y_i, 1)$ of the $i^{th}$ data point. For simplicity and to decrease roundoff error, we will set $Y'$ to be an empty matrix. 
-        Thus, we can find the parameters $A$, $B$, $C$, $D$, $F$, $G$ from $a$. 
-    \item Figure \ref{fig:1a} shows the best-fit ellipse from the given dataset. The ellipse appears to fit the data well, with small residuals; however, the data covers a limited region of the orbit. 
+        We can find the parameters $A$, $B$, $C$, $D$, $F$, $G$ from $a$, after using \code{np.linalg.eig} and selecting a to be the eigenvector with the largest corresponding eigenvalue.
+    \item Figure \ref{fig:1a} shows the best-fit ellipse from the given dataset. The ellipse appears to fit the data well, with small residuals; however, given that there are 5 independent fit parameters (since G serves as a constant factor) and only 5 data points, the ellipse is overfit to the data. 
+    The astronomer should take (at least 1) more datapoints to ensure a robust fit. 
     \begin{figure}[H]
         \centering 
         \captionsetup{margin=3.2cm}
@@ -127,7 +128,7 @@ right  = 2.50cm]{geometry}
     \caption{\label{fig:2bc} b) $\eta$ from 300 K to 10,000K for visible (380-780 nm) radiation and c) error $\epsilon=(I_{2N} - I_N)/I_N$}
   \end{figure}
   \item Using the golden ratio method to find the temperature of maximum efficiency, we find $T_{max}=6913 K$ and $\eta_{max}=0.49$. Albeit slow, golden ratio suffices in this instance, since the majority of computational power in evaluating $\eta$ arises from finding the weights and positions for Gaussian Quadrature, which only needs to be computed once across all iterations 
-  (since the integration bounds are constant)\footnote{To speed up the calculation, we could also take the first derivative of $\eta$ and search for its roots using Newton's method (Binary search is computationally equivalent to Golden Ratio, and it would be hard to isolate for $T$ in $\partial\eta(T)_T$ with which to use the Relaxation method).}
+  (since the integration bounds are constant). To speed up the calculation, we could also take the first derivative of $\eta$ and search for its roots using Newton's method (Binary search is computationally equivalent to Golden Ratio, and it would be hard to isolate for $T$ in $\partial\eta(T)_T$ with which to use the Relaxation method).
   
   \item For a lightbulb emitting in the infrared, using the same calculation procedure as in a) and c) (with \code{l1}=780 nm and \code{l2}=2250 nm), we find that the temperature of maximum efficiency is now $T_{max}=2925 K$ with $\eta_{max}=0.67$. 
   The IR efficiency from 300 to 10000 K is shown in Figure \ref{fig:2d}.
@@ -139,7 +140,7 @@ right  = 2.50cm]{geometry}
     \caption{\label{fig:2d} $\eta$ from 300 K to 10,000K for IR (780-2250 nm) radiation.}
   \end{figure}
 
-  The melting point of Tungsten is around 3700 K\footnote{\fullcite{blah}}, which is above the optimal temperature for $IR$ radiation, but below that of visible light. 
+  The melting point of Tungsten is around 3700 K\footnote{\fullcite{blah}}, which is above the optimal temperature for IR radiation, but below that of visible light. 
   It is possible to operate a light bulb at maximum efficiency in the IR region, but not for visible wavelengths.
 \end{enumerate}
 

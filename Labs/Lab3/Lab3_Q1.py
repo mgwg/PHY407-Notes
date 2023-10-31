@@ -85,8 +85,8 @@ def Y():
     # initialize matrix
     Y_mtx = np.zeros((6, 6))
     # set constraint elements
-    Y_mtx[1, 1] = -1/4
-    Y_mtx[0,2] = 4
+    Y_mtx[1, 1] = 1/4
+    Y_mtx[0,2] = -4
 
     return Y_mtx
 
